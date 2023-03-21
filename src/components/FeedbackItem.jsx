@@ -1,29 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Card from './share/Card';
 import PropTypes from 'prop-types';
-import {FaTimes} from 'react-icons/fa'
+import {FaTimes, FaEdit} from 'react-icons/fa'
+import FeedBackContext from '../context/FeedBackContext';
 
-const FeedbackItem = (props) => {
-    const {text, rating, handleDelete} = props;
-    // const [rating, setRating] = useState(7);
-    // const [text, setText] = useState('Example');
-
-    // const handleClick = () => {
-    //     //empty bracket arrow is actually a function in state
-    //     //passing previous state onto argument
-    //     setRating((prev) => {
-    //         return prev + 1
-    //     });
-    // }
+const FeedbackItem = ({item}) => {
+  const {deleteFeedback, editFeedBack} = useContext(FeedBackContext);
 
 
   return (
     <Card>
-        <div className="num-display">{rating}</div>
-        <button className='close' onClick={handleDelete}>
+        <div className="num-display">{item.rating}</div>
+        <button className='close' onClick={() => deleteFeedback(item.id)}>
             <FaTimes color='purple'/>
         </button>
-        <div className="text-display">{text}</div>
+        <button className="edit" onClick={() => editFeedBack(item)}>
+          <FaEdit color="purple"/>
+        </button>
+        <div className="text-display">{item.text}</div>
     </Card>
   )
 }

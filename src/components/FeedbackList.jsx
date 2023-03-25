@@ -2,56 +2,34 @@ import React, {useContext} from 'react';
 import FeedbackItem from './FeedbackItem';
 import {motion, AnimatePresence} from 'framer-motion';
 import FeedBackContext from '../context/FeedBackContext';
+import Spinner from './Spinner';
 
 const FeedbackList = () => {
-  const {feedback, handleDelete} = useContext(FeedBackContext);
-  return (
+  const {feedback, isLoading} = useContext(FeedBackContext);
+  
+  if (!isLoading && (!feedback || feedback.length === 0)) {
+    return <p>No Feedback Yet</p>
+  }
+
+  return isLoading ? (
+    <Spinner />
+  ) : (
     <div className='feedback-list'>
       <AnimatePresence>
-      {feedback && feedback.length > 0 ?
-        (
-          feedback.map((item) => 
-            <motion.div
-              key={item.id}
-              initial={{opacity: 0}}
-              animate={{opacity: 1}}
-              exit={{opacity: 0}}
-              >
-                <FeedbackItem 
-                key={item.id}
-                item={item}
-              />
-            </motion.div>
-            
-          )
-        ) : 
-        (
-          <p>No Feedback yet</p>
-          )
-        }
+        {feedback.map((item) => (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            layout
+          >
+            <FeedbackItem key={item.id} item={item} />
+          </motion.div>
+        ))}
       </AnimatePresence>
     </div>
   )
-
-
-  //component without animation
-  // return (
-  //   <div className='feedback-list'>{feedback && feedback.length > 0 ?
-  //       (
-  //         feedback.map((item) => 
-  //           <FeedbackItem 
-  //               key={item.id} 
-  //               text={item.text} 
-  //               rating={item.rating} 
-  //               handleDelete={() => handleDelete(item.id)}
-  //           />
-  //         )
-  //       ) : 
-  //       (
-  //         <p>No Feedback yet</p>
-  //         )
-  //       }</div>
-  // )
 }
 
 export default FeedbackList

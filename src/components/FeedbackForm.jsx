@@ -19,26 +19,26 @@ const FeedbackForm = () => {
         }
     }, [update])
 
-    const handleTextChange = (e) => {
-        if(text === ''){
+    const handleTextChange = ({ target: {value} }) => {
+        if(value === ''){
             setBtnDisabled(true);
             setMessage(null);
-        } else if(text !== '' && text.trim().length <= 10){
+        } else if(value.trim().length <= 10){
             setBtnDisabled(true);
             setMessage('Text must be at least 10 characters or greater');
         } else {
             setMessage(null);
             setBtnDisabled(false);
         }
-        setText(e.target.value);
+        setText(value);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if(text.trim().length > 10){
             const newFeedBack = {
-                text,
-                rating
+                text: text,
+                rating: rating
             }
 
             if(update.edit === true){
@@ -46,6 +46,8 @@ const FeedbackForm = () => {
             } else {
                 addFeedBack(newFeedBack)
             }
+            setBtnDisabled(true);
+            setRating(10);
             setText('');
         }
     }
@@ -53,7 +55,7 @@ const FeedbackForm = () => {
     <Card>
         <form onSubmit={handleSubmit}>
             <h2>How would you rate your service?</h2>
-            <RatingSelect select={(rating) => setRating(rating)}/>
+            <RatingSelect select={setRating} selected={rating}/>
             <div className="input-group">
                 <input value={text} onChange={handleTextChange} type="text" placeholder='Write a review'/>
                 <Button type='submit' isDisabled={btnDisabled}>Send</Button>
